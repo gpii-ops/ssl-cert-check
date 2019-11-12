@@ -20,6 +20,7 @@ Usage: ./ssl-cert-check [ -e email address ] [ -E sender email address ] [ -x da
   -k password       : PKCS12 file password
   -n                : Run as a Nagios plugin
   -N                : Run as a Nagios plugin and output one line summary (implies -n, requires -f or -d)
+  -P                : Display certificate metrics in Prometheus format
   -p port           : Port to connect to (interactive mode)
   -s commmon name   : Server to connect to (interactive mode)
   -t type           : Specify the certificate type

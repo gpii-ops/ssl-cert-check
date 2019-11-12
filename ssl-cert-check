@@ -501,7 +501,7 @@ prints()
             ${PRINTF} "certificate_status{name=\"$1:$2\",issuer=\"$6\",condition=\"$3\"} 1\n"
             ${PRINTF} "# HELP certificate_days_left Days left before the expiration.\n"
             ${PRINTF} "# TYPE certificate_days_left gauge\n"
-            ${PRINTF} "certificate_days_left{name=\"$1:$2\",issuer=\"$6\"} {$5:-"0"}\n"
+            ${PRINTF} "certificate_days_left{name=\"$1:$2\",issuer=\"$6\"} ${5:-"0"}\n"
         else
             ${PRINTF} "%-35s %-17s %-8s %-11s %-4s %-30s\n" "$1:$2" "$6" "$3" "$MIN_DATE" "$5"
         fi
@@ -518,7 +518,7 @@ prints()
             ${PRINTF} "certificate_status{name=\"$1:$2\",condition=\"$3\"} 1\n"
             ${PRINTF} "# HELP certificate_days_left Days left before the expiration.\n"
             ${PRINTF} "# TYPE certificate_days_left gauge\n"
-            ${PRINTF} "certificate_days_left{name=\"$1:$2\"} {$5:-"0"}\n"
+            ${PRINTF} "certificate_days_left{name=\"$1:$2\"} ${5:-"0"}\n"
         else
             ${PRINTF} "%-47s %-12s %-12s %-4s %-30s\n" "$1:$2" "$3" "$MIN_DATE" "$5"
         fi

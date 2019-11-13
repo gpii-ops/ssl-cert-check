@@ -1,6 +1,6 @@
 # SSL Certification Expiration Checker:
 
-ssl-cert-check is a Bourne shell script that can be used to report on expiring SSL certificates. The script was designed to be run from cron and can e-mail warnings or log alerts through nagios.  
+ssl-cert-check is a Bourne shell script that can be used to report on expiring SSL certificates. The script was designed to be run from cron and can e-mail warnings or log alerts through nagios.
 
 # Usage:
 <pre>
@@ -51,9 +51,9 @@ Check all certificates with file pattern "/etc/haproxy/ssl/\*.pem"
 $ ssl-cert-check -d "/etc/haproxy/ssl/*.pem"
 Host                                            Status       Expires      Days
 ----------------------------------------------- ------------ ------------ ----
-FILE:/etc/haproxy/ssl/example1.org.pem      Valid        Jan 6 2017   78                                 
-FILE:/etc/haproxy/ssl/example2.org.pem      Valid        Jan 1 2017   73                                 
-FILE:/etc/haproxy/ssl/example3.org.pem      Valid        Jan 6 2017   78                                 
+FILE:/etc/haproxy/ssl/example1.org.pem      Valid        Jan 6 2017   78
+FILE:/etc/haproxy/ssl/example2.org.pem      Valid        Jan 1 2017   73
+FILE:/etc/haproxy/ssl/example3.org.pem      Valid        Jan 6 2017   78
 </pre>
 
 Send an e-mail to admin@prefetch.net if a domain listed in ssldomains will expire in the next 60-days:
@@ -62,6 +62,52 @@ Send an e-mail to admin@prefetch.net if a domain listed in ssldomains will expir
 $ ssl-cert-check -a -f ssldomains -q -x 60 -e admin@prefetch.net
 </pre>
 
+Check certificate for a domain and output metrics in Prometheus format:
+
+<pre>
+$ ssl-cert-check -s google.com -p 443 -x 29 -P
+# HELP certificate_status Certificate status (i.e valid, expiring).
+# TYPE certificate_status gauge
+certificate_status{name="google.com:443",condition="Valid"} 1
+# HELP certificate_days_left Days left before the expiration.
+# TYPE certificate_days_left gauge
+certificate_days_left{name="google.com:443"} 57
+</pre>
+
 # Additional Documentation
 
 Documentation And Examples: http://prefetch.net/articles/checkcertificate.html
+
+## Building
+
+### Master
+
+On push/merge to master, CI will automatically build and push
+`gpii/ssl-cert-check:latest` image.
+
+### Tags
+
+Create and push git tag and CI will build and publish corresponding`
+`gpii/ssl-cert-check:${git_tag}` docker image.
+
+#### Tag format
+
+Tags should follow actual service-account-assigner version, suffixed by
+`-gpii.${gpii_build_number}`, where `gpii_build_number` is monotonically
+increasing number denoting Docker image build number,  starting from `0`
+for each upstream version.
+
+Example:
+```
+0.0.3-gpii.0
+0.0.3-gpii.1
+...
+0.0.4-gpii.0
+```
+
+### Manually
+
+Run `make` to see all available steps.
+
+- `make build` to build image as latest
+- `make push` to push this image to registry

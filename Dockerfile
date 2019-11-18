@@ -1,11 +1,11 @@
 FROM alpine
 
-RUN apk add --update openssl bash curl && \
-    rm -rf /var/cache/apk/*
+RUN apk add --no-cache --update openssl bash
 
 COPY ssl-cert-check /
 COPY entrypoint.sh /
 
-RUN chmod +rx /entrypoint.sh ssl-cert-check
+# nobody:nobody
+USER 65534:65534
 
 CMD ["/entrypoint.sh"]

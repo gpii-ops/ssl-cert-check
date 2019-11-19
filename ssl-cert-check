@@ -496,11 +496,7 @@ prints()
         if [ "${NAGIOS}" == "TRUE" ]; then
             ${PRINTF} "%-35s %-17s %-8s %-11s %-4s %-30s\n" "$1:$2" "$6" "$3" "$MIN_DATE" \|days="$5"
         elif [ "${PROMETHEUS}" == "TRUE" ]; then
-            ${PRINTF} "# HELP certificate_status Certificate status (i.e valid, expiring).\n"
-            ${PRINTF} "# TYPE certificate_status gauge\n"
             ${PRINTF} "certificate_status{name=\"$1:$2\",issuer=\"$6\",condition=\"$3\"} 1\n"
-            ${PRINTF} "# HELP certificate_days_left Days left before the expiration.\n"
-            ${PRINTF} "# TYPE certificate_days_left gauge\n"
             ${PRINTF} "certificate_days_left{name=\"$1:$2\",issuer=\"$6\"} ${5:-"0"}\n"
         else
             ${PRINTF} "%-35s %-17s %-8s %-11s %-4s %-30s\n" "$1:$2" "$6" "$3" "$MIN_DATE" "$5"
@@ -513,11 +509,7 @@ prints()
         if [ "${NAGIOS}" == "TRUE" ]; then
             ${PRINTF} "%-47s %-12s %-12s %-4s %-30s\n" "$1:$2" "$3" "$MIN_DATE" \|days="$5"
         elif [ "${PROMETHEUS}" == "TRUE" ]; then
-            ${PRINTF} "# HELP certificate_status Certificate status (i.e valid, expiring).\n"
-            ${PRINTF} "# TYPE certificate_status gauge\n"
             ${PRINTF} "certificate_status{name=\"$1:$2\",condition=\"$3\"} 1\n"
-            ${PRINTF} "# HELP certificate_days_left Days left before the expiration.\n"
-            ${PRINTF} "# TYPE certificate_days_left gauge\n"
             ${PRINTF} "certificate_days_left{name=\"$1:$2\"} ${5:-"0"}\n"
         else
             ${PRINTF} "%-47s %-12s %-12s %-4s %-30s\n" "$1:$2" "$3" "$MIN_DATE" "$5"
@@ -548,6 +540,11 @@ print_heading()
             ${PRINTF} "\n%-47s %-12s %-12s %-4s\n" "Host" "Status" "Expires" "Days"
             echo "----------------------------------------------- ------------ ------------ ----"
 
+        elif [ "${QUIET}" != "TRUE" ] && [ "${NAGIOS}" != "TRUE" ] && [ "${PROMETHEUS}" = "TRUE" ] && [ "${VALIDATION}" != "TRUE" ]; then
+            ${PRINTF} "# HELP certificate_status Certificate status (i.e valid, expiring).\n"
+            ${PRINTF} "# TYPE certificate_status gauge\n"
+            ${PRINTF} "# HELP certificate_days_left Days left before the expiration.\n"
+            ${PRINTF} "# TYPE certificate_days_left gauge\n"
         elif [ "${QUIET}" != "TRUE" ] && [ "${NAGIOS}" != "TRUE" ] && [ "${PROMETHEUS}" != "TRUE" ] && [ "${VALIDATION}" == "TRUE" ]; then
             ${PRINTF} "\n%-35s %-35s %-32s\n" "Host" "Common Name" "Serial #"
             echo "----------------------------------- ----------------------------------- --------------------------------"

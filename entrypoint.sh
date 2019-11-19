@@ -18,7 +18,8 @@ else
   SSL_CHECK_COMMAND="${SSL_CHECK_COMMAND} -s ${TARGET_HOST} -p ${TARGET_PORT} -x ${RENEWAL_WINDOW} -P"
 fi
 
-ssl_check() {
+ssl_check()
+{
   echo -ne "$(${SSL_CHECK_COMMAND})"
 }
 

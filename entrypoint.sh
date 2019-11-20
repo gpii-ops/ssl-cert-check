@@ -20,7 +20,7 @@ fi
 
 # Do not run as daemon in case neither target host or file is provided
 if [ "${TARGET_FILE}" == "" ] &&  [ "${TARGET_HOST}" == "" ]; then
-	DAEMON="false";
+  DAEMON="false";
 fi
 
 ssl_check()

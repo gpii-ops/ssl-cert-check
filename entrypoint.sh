@@ -4,7 +4,7 @@ DEBUG=${DEBUG:-"false"}
 SLEEP=${SLEEP:-"0"}
 
 TARGET_FILE=${TARGET_FILE:-""}
-TARGET_HOST=${TARGET_HOST:-"google.com"}
+TARGET_HOST=${TARGET_HOST:-""}
 TARGET_PORT=${TARGET_PORT:-"443"}
 RENEWAL_WINDOW=${RENEWAL_WINDOW:-"29"}
 DAEMON=${DAEMON:-"true"}
@@ -16,6 +16,11 @@ if [ "${TARGET_FILE}" != "" ]; then
   SSL_CHECK_COMMAND="${SSL_CHECK_COMMAND} -f ${TARGET_FILE} -x ${RENEWAL_WINDOW} -P"
 else
   SSL_CHECK_COMMAND="${SSL_CHECK_COMMAND} -s ${TARGET_HOST} -p ${TARGET_PORT} -x ${RENEWAL_WINDOW} -P"
+fi
+
+# Do not run as daemon in case neither target host or file is provided
+if [ "${TARGET_FILE}" == "" ] &&  [ "${TARGET_HOST}" == "" ]; then
+	DAEMON="false";
 fi
 
 ssl_check()

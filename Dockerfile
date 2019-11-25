@@ -1,6 +1,6 @@
 FROM alpine:3.8
 
-RUN apk add --no-cache --update openssl bash ruby ruby-json libc6-compat
+RUN apk add --no-cache --update openssl bash ruby ruby-json libc6-compat tini
 
 COPY Gemfile Gemfile.lock /
 
@@ -24,4 +24,4 @@ COPY entrypoint.sh /
 # nobody:nobody
 USER 65534:65534
 
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["tini", "--", "/entrypoint.sh"]
